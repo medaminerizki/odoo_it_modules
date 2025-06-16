@@ -116,7 +116,7 @@ This project is licensed under the Odoo Proprietary License v1.0 or as specified
   ![Mobile Details View](images/2mobile.PNG)
 
 - **IT Tickets List**
-  ![Tickets list](images/tickets.PNG)
+  ![Tickets list](images/tickets.png)
 
 
 
