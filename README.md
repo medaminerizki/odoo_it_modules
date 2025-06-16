@@ -90,8 +90,6 @@ This project is licensed under the Odoo Proprietary License v1.0 or as specified
 
 ## Screenshots
 
-## Screenshots
-
 ### Device Management
 
 - **Configuration**
@@ -120,8 +118,4 @@ This project is licensed under the Odoo Proprietary License v1.0 or as specified
 
 
 
----
 
-## Support
-
-For issues or feature requests, please use the GitHub Issues page.
