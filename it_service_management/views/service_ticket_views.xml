@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_service_ticket" model="ir.actions.act_window">
+        <field name="name">Service Tickets</field>
+        <field name="res_model">it.service.ticket</field>
+        <field name="view_mode">kanban,tree,form,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first IT service ticket
+            </p>
+        </field>
+    </record>
+    <!-- Form View -->
+    <record id="view_service_ticket_form" model="ir.ui.view">
+        <field name="name">service.ticket.form</field>
+        <field name="model">it.service.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Service Ticket">
+                <sheet>
+                    <header>
+                        <button name="action_in_progress" type="object" string="Start Progress" class="btn-primary"
+                            groups="it_service_management.group_it_technician,it_service_management.group_it_admin"
+                            invisible="not can_start_progress"/>
+                        <button name="action_waiting_info" type="object" string="Waiting for Info" class="btn-secondary"
+                            groups="it_service_management.group_it_technician,it_service_management.group_it_admin"
+                            invisible="not can_waiting_info"/>
+                        <button name="action_solved" type="object" string="Mark as Solved" class="btn-success"
+                            groups="it_service_management.group_it_technician,it_service_management.group_it_admin"
+                            invisible="not can_solve"/>
+                        <button name="action_closed" type="object" string="Close Ticket" class="btn-danger"
+                            groups="it_service_management.group_it_client"
+                            invisible="not can_close"/>
+                        <button name="print_ticket_pdf" type="object" string="Imprimer PDF" class="btn-secondary"/>
+                    </header>
+                    <group>
+                        <field name="name"/>
+                        <field name="client_id" domain="[('user_ids.groups_id', '=', client_group_id)]"/>
+                        <field name="device_ref"/>
+                        <field name="assigned_to" domain="[('groups_id', '=', technician_group_id)]"/>
+                        <field name="priority"/>
+                        <field name="deadline"/>
+                        <field name="description"/>
+                        <field name="date_created" readonly="1"/>
+                        <field name="state"/>
+                        <field name="can_close" invisible="1"/>
+                        <field name="client_group_id" invisible="1"/>        <!-- Ajoute cette ligne -->
+                        <field name="technician_group_id" invisible="1"/>    <!-- Ajoute cette ligne -->
+                        <field name="can_start_progress" invisible="1"/>
+                        <field name="can_waiting_info" invisible="1"/>
+                        <field name="can_solve" invisible="1"/>
+                    </group>
+                </sheet>
+                
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_service_ticket_tree" model="ir.ui.view">
+        <field name="name">service.ticket.tree</field>
+        <field name="model">it.service.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Service Tickets">
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="assigned_to"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <field name="deadline"/>
+                <field name="date_created"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_service_ticket_kanban" model="ir.ui.view">
+        <field name="name">service.ticket.kanban</field>
+        <field name="model">it.service.ticket</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="assigned_to"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="client_id"/></div>
+                            <div>Assigned: <field name="assigned_to"/></div>
+                            <div>Priority: <field name="priority"/></div>
+                            <div>Status: <field name="state"/></div>
+                            <div>Deadline: <field name="deadline"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="mail_template_ticket_assigned" model="mail.template">
+        <field name="name">Ticket Assigned</field>
+        <field name="model_id" ref="model_it_service_ticket"/>
+        <field name="subject">You have been assigned a new IT Service Ticket</field>
+        <field name="email_to">${object.assigned_to.partner_id.email}</field>
+        <field name="body_html">
+            <![CDATA[
+            <p>Hello ${object.assigned_to.name},</p>
+            <p>You have been assigned to the ticket: <strong>${object.name}</strong>.</p>
+            <p>Description: ${object.description}</p>
+            ]]>
+        </field>
+    </record>
+    
+    <record id="mail_template_ticket_deadline" model="mail.template">
+        <field name="name">Ticket Deadline Reminder</field>
+        <field name="model_id" ref="model_it_service_ticket"/>
+        <field name="subject">Ticket Deadline Approaching</field>
+        <field name="email_to">${object.assigned_to.partner_id.email}</field>
+        <field name="body_html">
+            <![CDATA[
+            <p>Hello ${object.assigned_to.name},</p>
+            <p>The deadline for ticket <strong>${object.name}</strong> is tomorrow.</p>
+            <p>Please ensure it is completed on time.</p>
+            ]]>
+        </field>
+    </record>
+    
+    <record id="service_ticket_client_rule" model="ir.rule">
+        <field name="name">Client: See Own Tickets</field>
+        <field name="model_id" ref="model_it_service_ticket"/>
+        <field name="domain_force">[('client_id','=',user.partner_id.id)]</field>
+        <field name="groups" eval="[(4, ref('it_service_management.group_it_client'))]"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <!--Graphe -->
+    <record id="view_service_ticket_graph" model="ir.ui.view">
+        <field name="name">service.ticket.graph</field>
+        <field name="model">it.service.ticket</field>
+        <field name="arch" type="xml">
+            <graph string="Statistiques des Tickets" type="bar">
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="id" type="count"/>
+            </graph>
+        </field>
+    </record>
+
+    
+</odoo>

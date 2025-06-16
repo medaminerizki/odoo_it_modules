@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_service_ticket_admin,access_service_ticket_admin,model_it_service_ticket,it_service_management.group_it_admin,1,1,1,1
+access_service_ticket_technician,access_service_ticket_technician,model_it_service_ticket,it_service_management.group_it_technician,1,1,1,0
+access_service_ticket_client,access_service_ticket_client,model_it_service_ticket,it_service_management.group_it_client,1,1,1,0

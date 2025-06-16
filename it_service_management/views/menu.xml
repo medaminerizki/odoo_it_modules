@@ -1,0 +1,6 @@
+<odoo>
+    <menuitem id="it_service_root" name="IT Service" sequence="10"/>
+    <menuitem id="it_service_menu_tickets" name="Tickets"
+              parent="it_service_root"
+              action="action_service_ticket"/>
+</odoo>

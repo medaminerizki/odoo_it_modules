@@ -1,0 +1,131 @@
+<odoo>
+    <!-- Déclaration du rapport -->
+    <record id="action_report_service_ticket" model="ir.actions.report">
+        <field name="name">Imprimer Ticket</field>
+        <field name="model">it.service.ticket</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">it_service_management.report_service_ticket_document</field>
+        <field name="report_file">it_service_management.report_service_ticket_document</field>
+        <field name="print_report_name">'Ticket - %s' % (object.name or '')</field>
+        <field name="binding_model_id" ref="model_it_service_ticket"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Template QWeb du rapport -->
+    <template id="report_service_ticket_document">
+        <t t-call="web.basic_layout">
+            <style>
+                .ticket-container {
+                    background: #f5f7fa;
+                    border-radius: 12px;
+                    box-shadow: 0 2px 8px #1976d220;
+                    padding: 32px 40px;
+                    margin: 30px auto;
+                    max-width: 600px;
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                }
+                .ticket-header {
+                    background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+                    color: #1976d2;
+                    border-radius: 8px 8px 0 0;
+                    padding: 18px 24px;
+                    font-size: 26px;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                    margin-bottom: 24px;
+                    text-align: center;
+                }
+                .ticket-row {
+                    display: flex;
+                    margin-bottom: 14px;
+                }
+                .ticket-label {
+                    width: 140px;
+                    color: #1976d2;
+                    font-weight: 600;
+                    font-size: 15px;
+                }
+                .ticket-value {
+                    color: #222;
+                    font-size: 15px;
+                    flex: 1;
+                }
+                .ticket-status {
+                    display: inline-block;
+                    padding: 4px 14px;
+                    border-radius: 12px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #fff;
+                    background: #43a047;
+                    margin-left: 8px;
+                }
+                .ticket-status.closed { background: #b71c1c; }
+                .ticket-status.solved { background: #388e3c; }
+                .ticket-status.waiting_info { background: #fbc02d; color: #222; }
+                .ticket-status.in_progress { background: #1976d2; }
+                .ticket-status.new { background: #0288d1; }
+            </style>
+            <t t-foreach="docs" t-as="ticket">
+                <div class="ticket-container">
+                    <div class="ticket-header">
+                        Service Ticket&#160;: <span t-esc="ticket.name"/>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Description :</span>
+                        <span class="ticket-value" t-esc="ticket.description"/>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Client :</span>
+                        <span class="ticket-value" t-esc="ticket.client_id.display_name"/>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Device :</span>
+                        <span class="ticket-value" t-esc="ticket.device_ref.display_name"/>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">
+                            <t t-if="ticket.device_ref._name == 'pc_device.model'">N° de série :</t>
+                            <t t-elif="ticket.device_ref._name == 'mobile_device.model'">IMEI :</t>
+                            <t t-elif="ticket.device_ref._name == 'it_devices.model'">N° de série :</t>
+                        </span>
+                        <span class="ticket-value">
+                            <t t-if="ticket.device_ref._name == 'pc_device.model'">
+                                <t t-esc="ticket.device_ref.pc_sn"/>
+                            </t>
+                            <t t-elif="ticket.device_ref._name == 'mobile_device.model'">
+                                <t t-esc="ticket.device_ref.mobile_imei"/>
+                            </t>
+                            <t t-elif="ticket.device_ref._name == 'it_devices.model'">
+                                <t t-esc="ticket.device_ref.serial"/>
+                            </t>
+                        </span>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Assigné à :</span>
+                        <span class="ticket-value" t-esc="ticket.assigned_to.display_name"/>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Statut :</span>
+                        <span class="ticket-value">
+                            <t t-set="status_class" t-value="'ticket-status ' + (ticket.state or '')"/>
+                            <span t-attf-class="${status_class}">
+                                <t t-esc="dict(new='Nouveau', in_progress='En cours', waiting_info='En attente', solved='Résolu', closed='Clôturé').get(ticket.state, ticket.state)"/>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Priorité :</span>
+                        <span class="ticket-value">
+                            <t t-esc="dict({'0':'Basse','1':'Normale','2':'Haute','3':'Urgente'}).get(ticket.priority, ticket.priority)"/>
+                        </span>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="ticket-label">Échéance :</span>
+                        <span class="ticket-value" t-esc="ticket.deadline"/>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,107 @@
+<odoo>
+    <!-- Marques (Brands) -->
+    <record id="brand_hp" model="it_device.brand">
+        <field name="name">HP</field>
+    </record>
+    <record id="brand_dell" model="it_device.brand">
+        <field name="name">Dell</field>
+    </record>
+    <record id="brand_lenovo" model="it_device.brand">
+        <field name="name">Lenovo</field>
+    </record>
+    <record id="brand_apple" model="it_device.brand">
+        <field name="name">Apple</field>
+    </record>
+    <record id="brand_samsung" model="it_device.brand">
+        <field name="name">Samsung</field>
+    </record>
+
+    <!-- Catégories (Tags) -->
+    <record id="cat_laptop" model="category">
+        <field name="name">Laptop</field>
+        <field name="color">1</field>
+    </record>
+    <record id="cat_desktop" model="category">
+        <field name="name">Desktop</field>
+        <field name="color">2</field>
+    </record>
+    <record id="cat_smartphone" model="category">
+        <field name="name">Smartphone</field>
+        <field name="color">3</field>
+    </record>
+
+    <!-- Modèles de PC -->
+    <record id="pc_model_hp_840" model="pc_model.model">
+        <field name="name">EliteBook 840</field>
+        <field name="brand" ref="brand_hp"/>
+    </record>
+    <record id="pc_model_dell_latitude" model="pc_model.model">
+        <field name="name">Latitude 5510</field>
+        <field name="brand" ref="brand_dell"/>
+    </record>
+    <record id="pc_model_lenovo_t14" model="pc_model.model">
+        <field name="name">ThinkPad T14</field>
+        <field name="brand" ref="brand_lenovo"/>
+    </record>
+
+    <!-- OS PC -->
+    <record id="os_windows_10" model="pc_os.model">
+        <field name="system">Windows</field>
+        <field name="distribution">10</field>
+        <field name="edition">Pro</field>
+        <field name="arch">64-bit</field>
+    </record>
+    <record id="os_ubuntu_22" model="pc_os.model">
+        <field name="system">Ubuntu</field>
+        <field name="distribution">22.04</field>
+        <field name="edition">LTS</field>
+        <field name="arch">64-bit</field>
+    </record>
+
+    <!-- Processeurs PC -->
+    <record id="cpu_i5" model="pc_cpu.model">
+        <field name="model">Intel Core i5-1135G7</field>
+        <field name="frequency">2.4</field>
+    </record>
+    <record id="cpu_ryzen5" model="pc_cpu.model">
+        <field name="model">AMD Ryzen 5 4500U</field>
+        <field name="frequency">2.3</field>
+    </record>
+
+    <!-- Modèles de téléphones -->
+    <record id="mobile_model_iphone" model="mobile_model.model">
+        <field name="name">iPhone 13</field>
+        <field name="brand" ref="brand_apple"/>
+    </record>
+    <record id="mobile_model_samsung" model="mobile_model.model">
+        <field name="name">Galaxy S22</field>
+        <field name="brand" ref="brand_samsung"/>
+    </record>
+
+    <!-- OS Mobile -->
+    <record id="mobile_os_ios" model="mobile_os.model">
+        <field name="name">iOS 16</field>
+    </record>
+    <record id="mobile_os_android" model="mobile_os.model">
+        <field name="name">Android 13</field>
+    </record>
+
+    <!-- Processeurs Mobile -->
+    <record id="mobile_proc_a15" model="mobile_processor.model">
+        <field name="name">Apple A15 Bionic</field>
+    </record>
+    <record id="mobile_proc_snapdragon" model="mobile_processor.model">
+        <field name="name">Snapdragon 8 Gen 1</field>
+    </record>
+
+    <!-- Réseaux mobiles (opérateurs marocains) -->
+    <record id="network_iam" model="mobile_network.model">
+        <field name="name">Maroc Telecom (IAM)</field>
+    </record>
+    <record id="network_orange" model="mobile_network.model">
+        <field name="name">Orange Maroc</field>
+    </record>
+    <record id="network_inwi" model="mobile_network.model">
+        <field name="name">Inwi</field>
+    </record>
+</odoo>
