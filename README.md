@@ -31,7 +31,7 @@ This repository contains two custom Odoo modules:
 1. **Clone or download this repository** into your Odoo `custom_addons` directory:
 
     ```sh
-    git clone <repo_url> <your_odoo_path>/custom_addons/
+    git clone https://github.com/medaminerizki/odoo_it_modules.git C:/Program Files/Odoo 17.0.20250609/custom_addons/
     ```
 
 2. **Dependencies**  
